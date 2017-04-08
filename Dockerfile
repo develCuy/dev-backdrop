@@ -73,7 +73,9 @@ RUN mkdir /home/deploy; useradd deploy; chown deploy: /home/deploy
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer; ln -s /usr/local/bin/composer /usr/bin/composer
 
 # Install Drush
-RUN mkdir /usr/local/src/composer; chown :deploy /usr/local/src/composer; chmod g+w /usr/local/src/composer; su deploy -c "composer global require webflo/drush-shim -d /usr/local/src/composer"
+RUN mkdir /usr/local/src/composer; chown :deploy /usr/local/src/composer; chmod g+w /usr/local/src/composer; su deploy -c "composer global require drush/drush -d /usr/local/src/composer/"
+RUN su deploy -c "cd /usr/local/src/composer/vendor/drush/drush/commands; mkdir backdrop; cd backdrop; git clone https://github.com/backdrop-contrib/drush.git .; rm -rf .git"
+RUN ln -s /usr/local/src/composer/vendor/drush/drush/drush /usr/local/bin/
 
 WORKDIR /var/www
 
